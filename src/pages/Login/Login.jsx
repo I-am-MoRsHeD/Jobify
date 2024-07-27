@@ -1,13 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { setUser } from "../../redux/features/userSlice";
+import { getToken } from "../../components/AuthApi/AuthApi";
 
 
 const Login = () => {
     const axiosPrivate = useAxiosPrivate();
-    // const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.userSlice);
+    const [allUser, setAllUser] = useState([]);
+    const dispatch = useDispatch();
+    // const { user } = useSelector((state) => state.userSlice);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+
+            const res = await axiosPrivate.get('/users')
+            setAllUser(res.data);
+        };
+        fetchData();
+    }, [axiosPrivate])
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -15,18 +28,28 @@ const Login = () => {
         const email = form.email.value.toLowerCase();
         const password = parseInt(form.password.value);
         const role = 'admin';
+        dispatch(setUser(email))
         const userInfo = {
             email,
             password,
             role
         };
-
-        localStorage.setItem('user', email);
-        const res = await axiosPrivate.post('/users', userInfo);
-        if (res) {
-            console.log(res);
-            navigate('/');
+        
+        const findUser = allUser?.find((user) => user?.email === email);
+        if (findUser) {
+            localStorage.setItem('user', email);
+            navigate('/addCompany');
+            getToken(email);
         }
+        else {
+            localStorage.setItem('user', email);
+            const res = await axiosPrivate.post('/users', userInfo);
+            if (res) {
+                navigate('/addCompany');
+                getToken(email);
+            }
+        }
+
     };
 
     return (

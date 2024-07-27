@@ -8,14 +8,14 @@ import AddJob from "../pages/AddJob/AddJob";
 import JobLists from "../pages/JobLists/JobLists";
 import CompanyInfo from "../pages/CompanyInfo/CompanyInfo";
 
-  const router = createBrowserRouter([
+const router = createBrowserRouter([
     {
         path: '/',
         element: <Home />,
         errorElement: <ErrorPage />,
         children: [
             {
-                path: '/',
+                path: '/login',
                 element: <Login />
             },
             {
@@ -32,7 +32,7 @@ import CompanyInfo from "../pages/CompanyInfo/CompanyInfo";
             },
             {
                 path: '/jobLists',
-                element: <JobLists />
+                element: <JobLists /> 
             },
             {
                 path: '/company/:id',
@@ -40,6 +40,6 @@ import CompanyInfo from "../pages/CompanyInfo/CompanyInfo";
             },
         ]
     }
-  ])
+])
 
-  export default router;
+export default router;

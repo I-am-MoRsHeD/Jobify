@@ -1,14 +1,18 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AdminDashboard from "../Dashboard/AdminDashboard/AdminDashboard";
 import Login from "../Login/Login";
 import useAdmin from "../../hooks/useAdmin";
+import { useSelector } from "react-redux";
 
 
 const Home = () => {
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-    // const [isAdmin, isAdminLoading] = useAdmin();
-    const user = localStorage.getItem('user');
-    // console.log(isAdmin);
+    const [isAdmin, isAdminLoading] = useAdmin();
+    const { user } = useSelector((state) => state.userSlice);
+    const userFromLocal = localStorage.getItem('user');
+
+    console.log(user);
+
     const toggleSideMenu = useCallback(() => {
         setIsSideMenuOpen((prevState) => !prevState);
     }, []);
@@ -17,21 +21,18 @@ const Home = () => {
         setIsSideMenuOpen(false);
     }, []);
 
-    const isAdmin = user ? true : false;
-
-    // if (isAdminLoading) {
-    //     return (
-    //         <div className="flex justify-center items-center h-screen">
-    //             <span className="loading loading-dots loading-lg "></span>
-    //             {/* <span className="text-xl font-bold ">Loading.....admin</span> */}
-    //         </div>
-    //     );
-    // }
+    if (isAdminLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <span className="loading loading-dots loading-lg "></span>
+            </div>
+        );
+    }
 
     return (
         <div>
             {
-                isAdmin ? (<AdminDashboard
+                isAdmin || userFromLocal ? (<AdminDashboard
                     isSideMenuOpen={isSideMenuOpen}
                     toggleSideMenu={toggleSideMenu}
                     closeSideMenu={closeSideMenu}

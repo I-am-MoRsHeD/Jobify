@@ -12,9 +12,9 @@ const companySlice = createSlice({
         addCompany: (state, { payload }) => {
             state.companies.push(payload)
         },
-        catchCompanyByid: (state, { payload }) => {
-            
-        }
+        // catchCompanyByid: (state, { payload }) => {
+
+        // }
     },
 })
 

@@ -1,9 +1,13 @@
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteUser } from "../../redux/features/userSlice";
+import { clearToken } from "../AuthApi/AuthApi";
 
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogout = () => {
         Swal.fire({
@@ -17,6 +21,8 @@ const Navbar = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.removeItem('user');
+                dispatch(deleteUser());
+                clearToken();
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
@@ -25,7 +31,7 @@ const Navbar = () => {
                     timer: 1500,
                 });
                 // clearToken();
-                navigate("/");
+                navigate("/login");
             }
         });
 
