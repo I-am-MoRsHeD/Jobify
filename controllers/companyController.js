@@ -61,3 +61,23 @@ exports.saveCompany = async (req, res) => {
         res.status(500).json({ message: "An error occurred" });
     }
 }
+
+exports.deleteCompany = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const query = { _id: new Object(id) };
+
+        const result = await companyDB.deleteOne(query);
+        if (result.deletedCount === 1) {
+            res.status(202).send({
+                message: "Job is deleted successfully",
+                success: true,
+                deletedCount: result.deletedCount,
+            });
+        }
+    } catch (err) {
+        console.error("Error deleting job:", err);
+        res.status(500).json({ message: "An error occurred" });
+    }
+}
+
