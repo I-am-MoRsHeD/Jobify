@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import AdminDashboard from "../Dashboard/AdminDashboard/AdminDashboard";
 import Login from "../Login/Login";
 import useAdmin from "../../hooks/useAdmin";
