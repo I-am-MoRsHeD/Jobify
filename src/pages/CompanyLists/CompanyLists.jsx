@@ -4,6 +4,8 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { Link } from "react-router-dom";
 import Pagination from "../../components/Pagination/Pagination";
 import { useEffect, useState } from "react";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import Swal from "sweetalert2";
 
 
 const CompanyLists = () => {
@@ -34,6 +36,32 @@ const CompanyLists = () => {
             refetch();
         }
     }, [companies, refetch]);
+
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosPrivate.delete(`/companies/${id}`).then((res) => {
+                    console.log(res.data);
+                    if (res.data.deletedCount === 1) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Company is deleted successfully",
+                            icon: "success",
+                        });
+                        refetch();
+                    }
+                });
+            }
+        });
+    };
 
     return (
         <div>
@@ -73,12 +101,13 @@ const CompanyLists = () => {
                                     <td>{data?.email}</td>
                                     <td>{data?.totalBranch}</td>
                                     <td>{data?.members}</td>
-                                    <th>
+                                    <th className="flex justify-between gap-4">
                                         <button className="focus:outline-none focus:ring-2 w-full focus:border-transparent bg-blue-600 hover:bg-blue-500 text-white font-semibol text-xs py-1 rounded-md">
                                             <Link to={`/company/${data?._id}`}>
                                                 Details
                                             </Link>
                                         </button>
+                                        <button title="Delete Job" onClick={() => handleDelete(data?._id)} className="btn  btn-xs"><RiDeleteBin6Line className="text-lg" /></button>
                                     </th>
                                 </tr>)
                         )
